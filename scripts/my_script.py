@@ -16,5 +16,17 @@ if not pygame.mixer:
 # Imports
 from my_module.functions import my_func, my_other_func
 
+# Constants we will use for screen
+size = 1200, 750
+black = 0, 0, 0
 
-pass
+screen = pygame.display.set_mode(size)
+
+
+while True:
+    for event in pygame.event.get():
+        if event.type in (QUIT, KEYDOWN):
+            sys.exit()
+    
+    screen.fill(black)
+    pygame.display.flip()
