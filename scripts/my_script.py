@@ -1,8 +1,9 @@
 """Script to run some part of my project."""
 
-# This adds the directory above to our Python path
-#   This is so that we can add import our custom python module code into this script
+# Imports
 import os, sys
+# This adds the directory above to our Python path
+# so that we can add import our custom python module code into this script
 sys.path.append('../')
 
 import pygame
@@ -13,16 +14,16 @@ if not pygame.font:
 if not pygame.mixer:
     print('Warning, sound disabled')
 
-# Imports
-from my_module.functions import my_func, my_other_func
+from my_module.functions import load_image
 
 # Constants we will use for screen
 size = 1200, 750
 black = 0, 0, 0
 
+# Set up the main screen
 screen = pygame.display.set_mode(size)
 
-
+# Loop of animation and all the program this game needs
 while True:
     for event in pygame.event.get():
         if event.type in (QUIT, KEYDOWN):
