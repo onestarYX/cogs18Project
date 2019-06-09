@@ -14,7 +14,7 @@ if not pygame.font:
 if not pygame.mixer:
     print('Warning, sound disabled')
 
-from my_module.functions import load_image
+from my_module.main_screen_funcs import load_image
 
 # Constants we will use for screen
 size = 1200, 750

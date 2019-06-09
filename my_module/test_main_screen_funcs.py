@@ -4,7 +4,7 @@ Note: because these are 'empty' functions (return None), here we just test
   that the functions execute, and return None, as expected.
 """
 
-from functions import my_func, my_other_func
+from main_screen_funcs import my_func, my_other_func
 
 ##
 ##
