@@ -23,11 +23,18 @@ black = 0, 0, 0
 # Set up the main screen
 screen = pygame.display.set_mode(size)
 
+stair = load_image('stair.png')
+stair_pos = stair.get_rect()
+y_speed = 10
+
 # Loop of animation and all the program this game needs
 while True:
     for event in pygame.event.get():
         if event.type in (QUIT, KEYDOWN):
             sys.exit()
-    
+    stair_pos = stair_pos.move(0, y_speed)
+    if stair_pos.top < 0 or stair_pos.bottom > 750:
+        y_speed = -y_speed
     screen.fill(black)
+    screen.blit(stair, stair_pos)
     pygame.display.flip()

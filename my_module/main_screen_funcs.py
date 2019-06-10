@@ -12,7 +12,7 @@ def my_func():
 def my_other_func():
     pass
 
-def load_image(name, colorkey=None):
+def load_image(name):
     """
     Load the image for the screen.
 
@@ -30,19 +30,14 @@ def load_image(name, colorkey=None):
         None
     """
 
-    fullname = os.path.join('assets', name)
+    fullname = os.path.join('../assets/', name)
 
     try:
         image = pygame.image.load(fullname)
-    except (pygame.error, message):
-        print ('Cannot load image:' + name)
-        raise (SystemExit, message)
+    except:
+        print ('Cannot load image: ' + name)
+        raise (SystemExit)
 
     image = image.convert()
 
-    if colorkey is not None:
-        if colorkey is -1:
-            colorkey = image.get_at((0,0))
-        image.set_colorkey(colorkey, RLEACCEL)
-        
-    return image, image.get_rect()
+    return image
