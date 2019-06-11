@@ -21,11 +21,16 @@ from my_module.Stair import Stair
 size = 1200, 750
 black = 0, 0, 0
 
+
+
 # Set up the main screen
 screen = pygame.display.set_mode(size)
 
 start_speed = 10
 stair = Stair('stair.png', start_speed)
+
+stairs = pygame.sprite.Group()
+stairs.add(stair)
 
 # Loop of animation and all the program this game needs
 while True:
@@ -33,8 +38,9 @@ while True:
         if event.type in (QUIT, KEYDOWN):
             sys.exit()
 
-    stair.move()
+    stairs.update()
 
     screen.fill(black)
-    screen.blit(stair.renderImage(), stair.getPos())
+    #screen.blit(stair.renderImage(), stair.getPos())
+    stairs.draw(screen)
     pygame.display.flip()
