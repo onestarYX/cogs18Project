@@ -6,9 +6,9 @@ class Stair(pygame.sprite.Sprite):
     def __init__(self, image, pos, screen, speed = 10):
         pygame.sprite.Sprite.__init__(self)
         self.image = load_image(image)
+        self.rect = self.image.get_rect().move(pos[0], pos[1])
         self.area = screen.get_rect()
         self.speed = speed
-        self.rect = self.image.get_rect().move(pos[0], pos[1])
 
     def update(self):
         self.rect = self.rect.move(0, -self.speed)
@@ -16,5 +16,8 @@ class Stair(pygame.sprite.Sprite):
             self.kill()
             Stair.current_stairs -= 1
 
-    def getPos(self):
+    def get_pos(self):
         return (self.rect.left, self.rect.top)
+
+    def get_rect(self):
+        return self.rect

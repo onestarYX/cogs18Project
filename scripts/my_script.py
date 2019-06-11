@@ -16,6 +16,7 @@ if not pygame.mixer:
 
 
 from my_module.Stair import Stair
+from my_module.Ball import Ball
 from my_module.main_screen_funcs import rand_x_offset, rand_y_offset, correct_x_pos
 
 # Constants we will use for screen
@@ -30,6 +31,7 @@ screen = pygame.display.set_mode(size)
 start_speed = 10
 initial_pos = 300, 750
 
+all_objects = pygame.sprite.RenderUpdates()
 stairs = pygame.sprite.Group()
 lowest_stair = pygame.sprite.GroupSingle()
 
@@ -38,6 +40,13 @@ stairs.add(new_stair)
 lowest_stair.add(new_stair)
 Stair.current_stairs = 1
 
+first_stair_pos = new_stair.get_pos()
+first_stair_rect = new_stair.get_rect()
+ball_init_pos = (first_stair_pos[0] + 0.5 * first_stair_rect.width, first_stair_pos[1])
+ball = Ball(ball_init_pos, start_speed)
+
+all_objects.add(new_stair, ball)
+
 # Loop of animation and all the program this game needs
 while True:
     for event in pygame.event.get():
@@ -45,18 +54,19 @@ while True:
             sys.exit()
 
     if Stair.current_stairs < max_stairs:
-        last_pos = lowest_stair.sprite.getPos()
+        last_pos = lowest_stair.sprite.get_pos()
         new_pos = [last_pos[0] + rand_x_offset(), last_pos[1] + rand_y_offset()]
         correct_x_pos(new_pos)
-        print('x change: {} and y change: {}'.format(new_pos[0] - last_pos[0], new_pos[1] - last_pos[1]))
+        # print('x change: {} and y change: {}'.format(new_pos[0] - last_pos[0], new_pos[1] - last_pos[1]))
         new_stair = Stair('stair.png', new_pos, screen, start_speed)
+        all_objects.add(new_stair)
         stairs.add(new_stair)
         lowest_stair.add(new_stair)
         Stair.current_stairs += 1
 
-    stairs.update()
+    all_objects.update()
     
 
     screen.fill(black)
-    stairs.draw(screen)
+    all_objects.draw(screen)
     pygame.display.flip()
