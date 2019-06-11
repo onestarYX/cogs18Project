@@ -1,6 +1,6 @@
 """A collection of function for doing my project."""
 
-import os, sys
+import os, sys, random
 sys.path.append('../')
 
 import pygame
@@ -41,3 +41,17 @@ def load_image(name):
     image = image.convert()
 
     return image
+
+def rand_x_offset():
+    return random.choice((1, -1)) * random.randrange(50, 350)
+
+def rand_y_offset():
+    return random.randrange(100, 280)
+
+def correct_x_pos(pos):
+    if pos[0] > 900:
+        print('true')
+        pos[0] -= (pos[0] - 900)
+    elif pos[0] < 0:
+        print('true')
+        pos[0] = 100
