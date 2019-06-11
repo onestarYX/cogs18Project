@@ -46,12 +46,12 @@ def rand_x_offset():
     return random.choice((1, -1)) * random.randrange(50, 350)
 
 def rand_y_offset():
-    return random.randrange(100, 280)
+    return random.randrange(70, 300)
 
 def correct_x_pos(pos):
-    if pos[0] > 900:
+    if pos[0] > 920:
         print('true')
-        pos[0] -= (pos[0] - 900)
+        pos[0] -= (pos[0] - 920 + random.randrange(30, 100))
     elif pos[0] < 0:
         print('true')
-        pos[0] = 100
+        pos[0] = random.randrange(30, 150)
