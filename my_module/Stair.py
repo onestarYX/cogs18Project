@@ -1,11 +1,12 @@
 import pygame
 
 class Stair(pygame.sprite.Sprite):
-    images = []
     current_stairs = 0
+    color = 255, 255, 255
     def __init__(self, pos, screen, speed = 10):
         pygame.sprite.Sprite.__init__(self)
-        self.image = Stair.images[0]
+        self.image = pygame.Surface([80, 8])
+        self.image.fill(Stair.color)
         self.rect = self.image.get_rect().move(pos[0], pos[1])
         self.area = screen.get_rect()
         self.speed = speed

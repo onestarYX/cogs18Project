@@ -42,15 +42,14 @@ background = pygame.Surface(size)
 # Give the background a color
 background.fill(black)
 
-#
-Stair.images = [load_image('stair.png')]
+#Stair.images = [load_image('stair.png')]
 
 
 """ Give some initial values for the game """
 # Initial speed of stairs going up when we start the game.
 start_speed = 5
 # Initial postion of the first stair
-initial_pos = 150, 160
+initial_pos = 150, 300
 
 # Set a clock to keep track of the FPS
 clock = pygame.time.Clock()
