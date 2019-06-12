@@ -17,27 +17,29 @@ if not pygame.mixer:
 
 from my_module.Stair import Stair
 from my_module.Ball import Ball
-from my_module.main_screen_funcs import rand_x_offset, rand_y_offset, correct_x_pos
+from my_module.main_screen_funcs import load_image, rand_x_offset, rand_y_offset, correct_x_pos
 
 # Constants we will use for screen
-size = 1200, 750
+size = 400, 320
 black = 0, 0, 0
-max_stairs = 10
+max_stairs = 8
 
 
 # Set up the main screen
 screen = pygame.display.set_mode(size)
 background = pygame.Surface(size)
 background.fill(black)
+Stair.images = [load_image('stair.png')]
 
 start_speed = 5
-initial_pos = 300, 750
+initial_pos = 150, 160
+clock = pygame.time.Clock()
 
 all_objects = pygame.sprite.RenderUpdates()
 stairs = pygame.sprite.Group()
 lowest_stair = pygame.sprite.GroupSingle()
 
-new_stair = Stair('stair.png', initial_pos, screen, start_speed)
+new_stair = Stair(initial_pos, screen, start_speed)
 all_objects.add(new_stair)
 stairs.add(new_stair)
 lowest_stair.add(new_stair)
@@ -62,7 +64,7 @@ while True:
         new_pos = [last_pos[0] + rand_x_offset(), last_pos[1] + rand_y_offset()]
         correct_x_pos(new_pos)
         # print('x change: {} and y change: {}'.format(new_pos[0] - last_pos[0], new_pos[1] - last_pos[1]))
-        new_stair = Stair('stair.png', new_pos, screen, start_speed)
+        new_stair = Stair(new_pos, screen, start_speed)
         all_objects.add(new_stair)
         stairs.add(new_stair)
         lowest_stair.add(new_stair)
@@ -81,17 +83,16 @@ while True:
         if balance_point[1] == stair_rect.top and \
         balance_point[0] >= stair_rect.left and \
         balance_point[0] <= stair_rect.right:
-            print("on the plate!")
             ball_y_direction = -1
             break
         else:
             ball_y_direction = 1
-
-    if(ball_y_direction == 1):
-        print('Not on the plate ......')
 
     all_objects.update()
     ball.move(ball_x_direction, ball_y_direction)
 
     dirty = all_objects.draw(screen)
     pygame.display.update(dirty)
+
+    clock.tick()
+    print(clock.get_fps())

@@ -43,13 +43,13 @@ def load_image(name):
     return image
 
 def rand_x_offset():
-    return random.choice((1, -1)) * random.randrange(50, 350, 10)
+    return random.choice((1, -1)) * random.randrange(20, 100, 10)
 
 def rand_y_offset():
-    return random.randrange(70, 270, 10)
+    return random.randrange(40, 160, 10)
 
 def correct_x_pos(pos):
-    if pos[0] > 920:
-        pos[0] -= (pos[0] - 920 + random.randrange(30, 100, 10))
+    if pos[0] > 360:
+        pos[0] -= (pos[0] - 360 + random.randrange(10, 60, 10))
     elif pos[0] < 0:
-        pos[0] = random.randrange(30, 150, 10)
+        pos[0] = random.randrange(10, 60, 10)

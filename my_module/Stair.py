@@ -1,11 +1,11 @@
 import pygame
-from my_module.main_screen_funcs import load_image
 
 class Stair(pygame.sprite.Sprite):
+    images = []
     current_stairs = 0
-    def __init__(self, image, pos, screen, speed = 10):
+    def __init__(self, pos, screen, speed = 10):
         pygame.sprite.Sprite.__init__(self)
-        self.image = load_image(image)
+        self.image = Stair.images[0]
         self.rect = self.image.get_rect().move(pos[0], pos[1])
         self.area = screen.get_rect()
         self.speed = speed
