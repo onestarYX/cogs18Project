@@ -6,11 +6,6 @@ sys.path.append('../')
 import pygame
 from pygame.locals import *
 
-def my_func():
-    pass
-
-def my_other_func():
-    pass
 
 def load_image(name):
     """
@@ -42,13 +37,52 @@ def load_image(name):
 
     return image
 
+
 def rand_x_offset():
+    """
+    The function which return a random integer to be used for increase of
+    distance in x direction for stairs.
+
+    =====
+    Parameters:
+        None
+    
+    =====
+    Returns:
+        A integer which is the distance
+    """
     return random.choice((1, -1)) * random.randrange(0, 144, 24)
 
+
 def rand_y_offset():
+    """
+    The function which return a random integer to be used for increase of
+    distance in y direction for stairs.
+
+    =====
+    Parameters:
+        None
+    
+    =====
+    Returns:
+        A integer which is the distance
+    """
     return random.randrange(48, 144, 24)
 
+
 def correct_x_pos(pos):
+    """
+    The function which corrects stair's x coordinate in order to
+    avoid the stair's position being somewhere out of the screen.
+
+    =====
+    Parameters:
+        pos--list:
+            the ball's coordinate list.
+    =====
+    Returns:
+        None
+    """
     if pos[0] > 420:
         pos[0] = 408 - random.randrange(0, 72, 24)
     elif pos[0] < 0:

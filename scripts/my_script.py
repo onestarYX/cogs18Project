@@ -75,6 +75,7 @@ Stair.current_stairs = 1
 """ Initialize the ball """
 first_stair_pos = new_stair.get_pos()
 first_stair_rect = new_stair.get_rect()
+# Set ball's initial position to be the middle of the first stair.
 ball_init_pos = (first_stair_pos[0] + 0.5 * first_stair_rect.width, first_stair_pos[1])
 ball = Ball(ball_init_pos, screen, start_x_speed, start_y_speed)
 # Add the ball into the all_objects group.
@@ -140,12 +141,14 @@ while True:
     # Increase the score
     Score.score += 1
 
+
     """ Increase the difficulty of the game when the score is between
         600 and 1000, or 2000 and 2400 """
     # Since when we increase the difficulty, the ball might be falling down,
     # so the distance between the ball and newly created stair might be
-    # messed up, so we want to accelerate the game when the ball is held by
-    # a stair.
+    # messed up (b.c. the distance between the two has to be a multiple
+    # of the sum of ball's and the stairs' speed), so we want to increase the
+    # difficulty when the ball is held by a stair.
     if ball_y_direction == -1:
         if Score.score in range(600, 1000):
             # Set the start_y_speed for future use in creating stair with the
@@ -178,6 +181,8 @@ while True:
         sys.exit()
 
     # Calculate the FPS and print it for debuging purpose.
-    # Comment if no need to use.
+    # Comment it out if no need to use.
     clock.tick()
     # print(clock.get_fps())
+
+print('Your score: ', Score.score)
