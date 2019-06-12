@@ -25,9 +25,9 @@ from my_module.main_screen_funcs import load_image, rand_x_offset, rand_y_offset
 
 
 """ Constants for the screen """
-size = 400, 320
+size = 500, 400
 black = 0, 0, 0
-max_stairs = 8
+max_stairs = 10
 
 
 """ Set up main screen and background. """
@@ -42,9 +42,11 @@ background.fill(black)
 
 """ Give some initial values for the game """
 # Initial speed of stairs going up when we start the game.
-start_speed = 5
+start_y_speed = 2
+# Initial speed of ball moving horizontally
+start_x_speed = 4
 # Initial postion of the first stair
-initial_pos = 150, 300
+initial_pos = 216, size[1] - 20
 
 # Set a clock to keep track of the FPS
 clock = pygame.time.Clock()
@@ -62,7 +64,7 @@ lowest_stair = pygame.sprite.GroupSingle()
 
 
 """ Initialize the first stair and add it to all the groups """
-new_stair = Stair(initial_pos, screen, start_speed)
+new_stair = Stair(initial_pos, screen, start_y_speed)
 all_objects.add(new_stair)
 stairs.add(new_stair)
 lowest_stair.add(new_stair)
@@ -74,7 +76,7 @@ Stair.current_stairs = 1
 first_stair_pos = new_stair.get_pos()
 first_stair_rect = new_stair.get_rect()
 ball_init_pos = (first_stair_pos[0] + 0.5 * first_stair_rect.width, first_stair_pos[1])
-ball = Ball(ball_init_pos, screen, start_speed)
+ball = Ball(ball_init_pos, screen, start_x_speed, start_y_speed)
 # Add the ball into the all_objects group.
 all_objects.add(ball)
 
@@ -101,7 +103,7 @@ while True:
         # To avoid the stair shows up out of the screen.
         correct_x_pos(new_pos)
         # Create a stair
-        new_stair = Stair(new_pos, screen, start_speed)
+        new_stair = Stair(new_pos, screen, start_y_speed)
         all_objects.add(new_stair)
         stairs.add(new_stair)
         lowest_stair.add(new_stair)
@@ -136,6 +138,18 @@ while True:
             ball_y_direction = 1
 
     Score.score += 1
+
+    if ball_y_direction == -1:
+        if Score.score in range(600, 1000):
+            start_y_speed = 4
+            for stair in stairs.sprites():
+                stair.set_speed_lv1()
+            ball.set_speed_lv1()
+        elif Score.score in range(2000, 2400):
+            start_y_speed = 6
+            for stair in stairs.sprites():
+                stair.set_speed_lv2()
+            ball.set_speed_lv2()
 
     # Update all objects' postions by calling update to every sprite object
     # in the group.

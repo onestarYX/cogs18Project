@@ -17,6 +17,12 @@ class Stair(pygame.sprite.Sprite):
             self.kill()
             Stair.current_stairs -= 1
 
+    def set_speed_lv1(self):
+        self.speed = 4
+
+    def set_speed_lv2(self):
+        self.speed = 6
+
     def get_pos(self):
         return (self.rect.left, self.rect.top)
 
