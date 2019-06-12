@@ -1,85 +1,134 @@
-"""Script to run some part of my project."""
+"""
+File description: Script to run Don't Fall.
+Author: Yixing Wang
+PID: A14521981
+Last edit Time: 06/11
+"""
 
-# Imports
+""" Import some python offcial modules """
 import sys
 # This adds the directory above to our Python path
 # so that we can add import our custom python module code into this script
 sys.path.append('../')
 
+""" Import pygame package and all its local pre-defined macros. """
 import pygame
 from pygame.locals import *
 
+""" Check if font and sound package available """
 if not pygame.font:
     print('Warning, fonts disabled')
 if not pygame.mixer:
     print('Warning, sound disabled')
 
-
+""" Import my own modules and functions """
 from my_module.Stair import Stair
 from my_module.Ball import Ball
 from my_module.main_screen_funcs import load_image, rand_x_offset, rand_y_offset, correct_x_pos
 
-# Constants we will use for screen
+
+
+""" Constants for the screen """
 size = 400, 320
 black = 0, 0, 0
 max_stairs = 8
 
 
+""" Set up main screen and background. """
 # Set up the main screen
 screen = pygame.display.set_mode(size)
+# Configure the background
 background = pygame.Surface(size)
+# Give the background a color
 background.fill(black)
+
+#
 Stair.images = [load_image('stair.png')]
 
+
+""" Give some initial values for the game """
+# Initial speed of stairs going up when we start the game.
 start_speed = 5
+# Initial postion of the first stair
 initial_pos = 150, 160
+
+# Set a clock to keep track of the FPS
 clock = pygame.time.Clock()
 
+
+""" All sprite groups we will need for this game. """
+# Group of all objects in this game.
 all_objects = pygame.sprite.RenderUpdates()
+# Group of stairs
 stairs = pygame.sprite.Group()
+# Keep track of the lowest stair (or last created stair) using GroupSingle
+# container, so next time we can create the new stair at some distance 
+# below the lowest stair.
 lowest_stair = pygame.sprite.GroupSingle()
 
+
+""" Initialize the first stair and add it to all the groups """
 new_stair = Stair(initial_pos, screen, start_speed)
 all_objects.add(new_stair)
 stairs.add(new_stair)
 lowest_stair.add(new_stair)
+# Increase the stairs count.
 Stair.current_stairs = 1
 
+
+""" Initialize the ball """
 first_stair_pos = new_stair.get_pos()
 first_stair_rect = new_stair.get_rect()
 ball_init_pos = (first_stair_pos[0] + 0.5 * first_stair_rect.width, first_stair_pos[1])
-ball = Ball(ball_init_pos, start_speed)
-
+ball = Ball(ball_init_pos, screen, start_speed)
+# Add the ball into the all_objects group.
 all_objects.add(ball)
 
 
-# Loop of animation and all the program this game needs
+# Loop of animation when this game is running
 while True:
+
+    """ Listen for player's manually exit operation """
     for event in pygame.event.get():
         if event.type == QUIT:
             sys.exit()
 
+    """ Check whether or not we need to create new stairs. """
     if Stair.current_stairs < max_stairs:
+        # Get the current lowest stair postion.
         last_pos = lowest_stair.sprite.get_pos()
+        # Calculate for the postion of the new stair by adding randomized distance
+        # to last_pos.
         new_pos = [last_pos[0] + rand_x_offset(), last_pos[1] + rand_y_offset()]
+        # To avoid the stair shows up out of the screen.
         correct_x_pos(new_pos)
-        # print('x change: {} and y change: {}'.format(new_pos[0] - last_pos[0], new_pos[1] - last_pos[1]))
+        # Create a stair
         new_stair = Stair(new_pos, screen, start_speed)
         all_objects.add(new_stair)
         stairs.add(new_stair)
         lowest_stair.add(new_stair)
         Stair.current_stairs += 1
 
+    # Erase objects from current the screen by painting the screen with
+    # background.
     all_objects.clear(screen, background)
 
-
+    """ Listen for the key press """
     key = pygame.key.get_pressed()
     ball_x_direction = key[K_RIGHT] - key[K_LEFT]
-    balance_point = ball.get_rect().midbottom
+    # Set the direction of ball's motion as 1 because by gravity we
+    # always want the ball to fall down.
     ball_y_direction = 1
 
+    # Keep track for the point at the ball which decides whether or not
+    # the ball can be held by the stairs.
+    balance_point = ball.get_rect().midbottom
+
+    """ A loop to check whether the ball should be held by any stair """
     for stair in stairs.sprites():
         stair_rect = stair.get_rect()
+        # If the ball's positon is right "on" the stair, the ball should go
+        # up with the stair.
         if balance_point[1] == stair_rect.top and \
         balance_point[0] >= stair_rect.left and \
         balance_point[0] <= stair_rect.right:
@@ -88,11 +137,23 @@ while True:
         else:
             ball_y_direction = 1
 
+    # Update all objects' postions by calling update to every sprite object
+    # in the group.
     all_objects.update()
+    # Move the ball according to its postion and player's input.
     ball.move(ball_x_direction, ball_y_direction)
 
+    # Draw objects with updated postions and return the list of rectangular
+    # pixels changed. We only want to update the changed area for the purpose
+    # of improving FPS.
     dirty = all_objects.draw(screen)
     pygame.display.update(dirty)
 
+    # Check if we lose
+    if ball.is_out_of_bound():
+        break
+        sys.exit()
+
+    # Calculate the FPS and print it for debuging purpose.
     clock.tick()
     print(clock.get_fps())
