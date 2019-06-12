@@ -137,10 +137,19 @@ while True:
         else:
             ball_y_direction = 1
 
+    # Increase the score
     Score.score += 1
 
+    """ Increase the difficulty of the game when the score is between
+        600 and 1000, or 2000 and 2400 """
+    # Since when we increase the difficulty, the ball might be falling down,
+    # so the distance between the ball and newly created stair might be
+    # messed up, so we want to accelerate the game when the ball is held by
+    # a stair.
     if ball_y_direction == -1:
         if Score.score in range(600, 1000):
+            # Set the start_y_speed for future use in creating stair with the
+            # correct speed.
             start_y_speed = 4
             for stair in stairs.sprites():
                 stair.set_speed_lv1()
@@ -169,5 +178,6 @@ while True:
         sys.exit()
 
     # Calculate the FPS and print it for debuging purpose.
+    # Comment if no need to use.
     clock.tick()
-    print(clock.get_fps())
+    # print(clock.get_fps())

@@ -50,6 +50,6 @@ def rand_y_offset():
 
 def correct_x_pos(pos):
     if pos[0] > 420:
-        pos[0] = 408 - random.randrange(0, 48, 24)
+        pos[0] = 408 - random.randrange(0, 72, 24)
     elif pos[0] < 0:
-        pos[0] = random.randrange(0, 48, 24)
+        pos[0] = random.randrange(0, 72, 24)
