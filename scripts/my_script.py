@@ -13,17 +13,13 @@ sys.path.append('../')
 
 """ Import pygame package and all its local pre-defined macros. """
 import pygame
+pygame.init()
 from pygame.locals import *
-
-""" Check if font and sound package available """
-if not pygame.font:
-    print('Warning, fonts disabled')
-if not pygame.mixer:
-    print('Warning, sound disabled')
 
 """ Import my own modules and functions """
 from my_module.Stair import Stair
 from my_module.Ball import Ball
+from my_module.Score import Score
 from my_module.main_screen_funcs import load_image, rand_x_offset, rand_y_offset, correct_x_pos
 
 
@@ -39,10 +35,9 @@ max_stairs = 8
 screen = pygame.display.set_mode(size)
 # Configure the background
 background = pygame.Surface(size)
+background = background.convert()
 # Give the background a color
 background.fill(black)
-
-#Stair.images = [load_image('stair.png')]
 
 
 """ Give some initial values for the game """
@@ -82,6 +77,10 @@ ball_init_pos = (first_stair_pos[0] + 0.5 * first_stair_rect.width, first_stair_
 ball = Ball(ball_init_pos, screen, start_speed)
 # Add the ball into the all_objects group.
 all_objects.add(ball)
+
+""" Initialize the score msg """
+score = Score()
+all_objects.add(score)
 
 
 # Loop of animation when this game is running
@@ -135,6 +134,8 @@ while True:
             break
         else:
             ball_y_direction = 1
+
+    Score.score += 1
 
     # Update all objects' postions by calling update to every sprite object
     # in the group.
